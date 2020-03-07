@@ -10,23 +10,32 @@ class App extends React.Component {
     this.state = {
       repos: [{username:'someGit', id:2342432}]
     }
-
+    this.onSearch = this.onSearch.bind(this);
   }
 
   // componentDidMount() {
   //   getRepos();
   // }
 
-  search (term) {
-    console.log(`${term} was searched`);
-    // TODO
+  onSearch (username) {
+    console.log(`${username} was searched`);
+    $.ajax({
+      method: 'POST',
+      url: '/repos',
+      data: { username },
+      sucess: () => {
+        // getRepos
+      console.log('onSearch post request is done')
+      },
+      error: (err) => console.log(err)
+    });
   }
 
 
   render () {
     return (<div>
       <h1>Github Fetcher</h1>
-      <Search onSearch={this.search.bind(this)}/>
+      <Search onSearch={this.onSearch}/>
       <RepoList repos={this.state.repos}/>
     </div>)
   }
