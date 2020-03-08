@@ -8,28 +8,46 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repos: [{username:'someGit', id:2342432}]
+      repos: []
     }
     this.onSearch = this.onSearch.bind(this);
+    this.getRepos = this.getRepos.bind(this);
   }
 
-  // componentDidMount() {
-  //   getRepos();
-  // }
+  componentDidMount() {
+    this.getRepos();
+  }
 
   onSearch (username) {
     console.log(`${username} was searched`);
     $.ajax({
       method: 'POST',
       url: '/repos',
-      data: { username },
-      sucess: () => {
+      data: JSON.stringify({ username }),
+      contentType: 'application/json',
+      success: () => {
         // getRepos
-      console.log('onSearch post request is done')
+      this.getRepos()
       },
       error: (err) => console.log(err)
     });
   }
+
+  getRepos(repos) {
+    console.log(`Currently Getting something`);
+    $.ajax({
+      method: 'GET',
+      url: '/repos',
+      success: (repos) => {
+        // getRepos
+      console.log('getRepos might be working')
+      this.setState({ repos }, ()=>console.log(this.state.repos))
+      },
+      error: (err) => console.log(err)
+    });
+  }
+
+
 
 
   render () {
